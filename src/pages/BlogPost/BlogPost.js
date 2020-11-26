@@ -12,7 +12,8 @@ class BlogPost extends Component{
             title: "",
             body: "",
             userId: 1
-        }
+        },
+        isUpdate: false,
     }
 
     deleteHandler = (id)=> {
@@ -49,21 +50,64 @@ class BlogPost extends Component{
     formChange = (event)=>{
         let formNewValue = {...this.state.formBlogPost};
         let title = event.target.value;
-        let timestamp = new Date().getTime();
+        if(!this.state.isUpdate){
+            let timestamp = new Date().getTime();
+            formNewValue["id"] = timestamp;
+        }
         formNewValue[event.target.name] = title;
-        formNewValue["id"] = timestamp;
         this.setState({
             formBlogPost: formNewValue
         });
+    }
+
+    submitToAPI = ()=>{
+        if(this.state.isUpdate){
+            this.putAPI();
+        }
+        else{
+            this.postAPI();
+        }
     }
 
     postAPI = ()=>{
         axios.post('https://my-json-server.typicode.com/fachri-amin/fake-api/posts', this.state.formBlogPost)
         .then((res)=>{
             alert('New post added');
+            this.setState({
+                formBlogPost:{
+                    id: 1,
+                    title: "",
+                    body: "",
+                    userId: 1
+                }
+            });
         }, (err)=>{
             alert(err);
         });
+    }
+
+    updateHandler = (data)=>{
+        this.setState({
+            formBlogPost: data,
+            isUpdate: true
+        })
+        
+    }
+
+    putAPI = ()=>{
+        axios.put(`https://my-json-server.typicode.com/fachri-amin/fake-api/posts/${this.state.formBlogPost.id}`, this.state.formBlogPost)
+        .then((res)=>{
+            alert('Post was updated');
+            this.setState({
+                formBlogPost:{
+                    id: 1,
+                    title: "",
+                    body: "",
+                    userId: 1
+                },
+                isUpdate: false
+            });
+        }, (err)=>alert(err));
     }
 
     render(){
@@ -75,18 +119,18 @@ class BlogPost extends Component{
                 <form className="col-lg-6 rounded shadow-lg pb-3 mb-5 ml-4">
                     <div className="form-group">
                         <label htmlFor="title">Title</label>
-                        <input name="title" type="text" className="form-control" id="title" onChange={this.formChange} />
+                        <input placeholder="Input post title here" value={this.state.formBlogPost.title} name="title" type="text" className="form-control" id="title" onChange={this.formChange} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="body">Body</label>
-                        <textarea name="body" id="body" className="form-control" cols="30" rows="10" onChange={this.formChange}></textarea>
+                        <textarea placeholder="Input post body here" value={this.state.formBlogPost.body} name="body" id="body" className="form-control" cols="30" rows="10" onChange={this.formChange}></textarea>
                     </div>
-                    <button type="button" className="btn btn-primary" onClick={this.postAPI}>Submit</button>
+                    <button type="button" className="btn btn-primary" onClick={this.submitToAPI}>Submit</button>
                 </form>
 
                 {
                     this.state.post.map(post => {
-                        return <Post key={post.id} data={post} remove={(id)=>this.deleteHandler(id)} />
+                        return <Post key={post.id} data={post} remove={(id)=>this.deleteHandler(id)} update={(data)=>this.updateHandler(data)} />
                         {/* props key harus ada agar setiap component punya keunikan, jika tidak maka akan ada warning */}
                     })
                 }
