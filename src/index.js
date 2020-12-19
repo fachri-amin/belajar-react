@@ -1,15 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import "./index.css";
-// import App from "./App";
-// import reportWebVitals from "./reportWebVitals";
-// import Product from "./pages/Product/Product";
-import BlogPost from './pages/BlogPost/BlogPost';
+import App from "./App";
+import { createStore } from "redux";
+import { Provider } from 'react-redux';
+import rootReducer from './redux/reducer/globalReducer'
+
+const store = createStore(rootReducer);
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <BlogPost /> {/*begini cara memanggil component yang telah dibuat*/}
+    <Provider store={store}>
+      <App /> {/*begini cara memanggil component yang telah dibuat*/}
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

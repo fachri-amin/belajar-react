@@ -1,9 +1,9 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import './BlogPost.css';
 import Post from '../../components/Post/Post';
 import axios from 'axios';
 
-class BlogPost extends Component{
+class BlogPost extends Component {
 
     state = {
         post: [],
@@ -16,41 +16,41 @@ class BlogPost extends Component{
         isUpdate: false,
     }
 
-    deleteHandler = (id)=> {
+    deleteHandler = (id) => {
         console.log(id);
         axios.delete(`https://my-json-server.typicode.com/fachri-amin/fake-api/posts/${id}`)
-        .then((res)=>{
-            if(res.status == 200){
-                alert('Delete Success');
-            }
-            else{
-                alert('Delete Failed');
-            }
-        });
+            .then((res) => {
+                if (res.status == 200) {
+                    alert('Delete Success');
+                }
+                else {
+                    alert('Delete Failed');
+                }
+            });
     }
 
-    getPostAPI = ()=>{
+    getPostAPI = () => {
         axios.get('https://my-json-server.typicode.com/fachri-amin/fake-api/posts')
-        .then((result)=>{
-            this.setState({
-                post:result.data
-            })
-        });    
+            .then((result) => {
+                this.setState({
+                    post: result.data
+                })
+            });
     }
 
-    componentDidMount(){
+    componentDidMount() {
         axios.get('https://my-json-server.typicode.com/fachri-amin/fake-api/posts')
-        .then((result)=>{
-            this.setState({
-                post:result.data
-            })
-        });            
+            .then((result) => {
+                this.setState({
+                    post: result.data
+                })
+            });
     }
 
-    formChange = (event)=>{
-        let formNewValue = {...this.state.formBlogPost};
+    formChange = (event) => {
+        let formNewValue = { ...this.state.formBlogPost };
         let title = event.target.value;
-        if(!this.state.isUpdate){
+        if (!this.state.isUpdate) {
             let timestamp = new Date().getTime();
             formNewValue["id"] = timestamp;
         }
@@ -60,57 +60,61 @@ class BlogPost extends Component{
         });
     }
 
-    submitToAPI = ()=>{
-        if(this.state.isUpdate){
+    submitToAPI = () => {
+        if (this.state.isUpdate) {
             this.putAPI();
         }
-        else{
+        else {
             this.postAPI();
         }
     }
 
-    postAPI = ()=>{
+    postAPI = () => {
         axios.post('https://my-json-server.typicode.com/fachri-amin/fake-api/posts', this.state.formBlogPost)
-        .then((res)=>{
-            alert('New post added');
-            this.setState({
-                formBlogPost:{
-                    id: 1,
-                    title: "",
-                    body: "",
-                    userId: 1
-                }
+            .then((res) => {
+                alert('New post added');
+                this.setState({
+                    formBlogPost: {
+                        id: 1,
+                        title: "",
+                        body: "",
+                        userId: 1
+                    }
+                });
+            }, (err) => {
+                alert(err);
             });
-        }, (err)=>{
-            alert(err);
-        });
     }
 
-    updateHandler = (data)=>{
+    updateHandler = (data) => {
         this.setState({
             formBlogPost: data,
             isUpdate: true
         })
-        
+
     }
 
-    putAPI = ()=>{
+    putAPI = () => {
         axios.put(`https://my-json-server.typicode.com/fachri-amin/fake-api/posts/${this.state.formBlogPost.id}`, this.state.formBlogPost)
-        .then((res)=>{
-            alert('Post was updated');
-            this.setState({
-                formBlogPost:{
-                    id: 1,
-                    title: "",
-                    body: "",
-                    userId: 1
-                },
-                isUpdate: false
-            });
-        }, (err)=>alert(err));
+            .then((res) => {
+                alert('Post was updated');
+                this.setState({
+                    formBlogPost: {
+                        id: 1,
+                        title: "",
+                        body: "",
+                        userId: 1
+                    },
+                    isUpdate: false
+                });
+            }, (err) => alert(err));
     }
 
-    render(){
+    detailHandler = (id) => {
+        this.props.history.push(`/blog/detail/${id}`)
+    }
+
+    render() {
         return (
             <Fragment>
                 <p>Blog Post</p>
@@ -130,8 +134,8 @@ class BlogPost extends Component{
 
                 {
                     this.state.post.map(post => {
-                        return <Post key={post.id} data={post} remove={(id)=>this.deleteHandler(id)} update={(data)=>this.updateHandler(data)} />
-                        {/* props key harus ada agar setiap component punya keunikan, jika tidak maka akan ada warning */}
+                        return <Post key={post.id} data={post} remove={this.deleteHandler} update={this.updateHandler} goDetail={this.detailHandler} />
+                        {/* props key harus ada agar setiap component punya keunikan, jika tidak maka akan ada warning */ }
                     })
                 }
 
