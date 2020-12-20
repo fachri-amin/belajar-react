@@ -1,0 +1,1 @@
+export const DefaultAPI = 'https://my-json-server.typicode.com/fachri-amin/fake-api/';

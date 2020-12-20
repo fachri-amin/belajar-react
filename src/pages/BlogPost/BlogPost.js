@@ -78,20 +78,20 @@ class BlogPost extends Component {
     }
 
     postAPI = () => {
-        axios.post('https://my-json-server.typicode.com/fachri-amin/fake-api/posts', this.state.formBlogPost)
-            .then((res) => {
-                alert('New post added');
-                this.setState({
-                    formBlogPost: {
-                        id: 1,
-                        title: "",
-                        body: "",
-                        userId: 1
-                    }
-                });
+        API.postNewBlog(this.state.formBlogPost).then((res) => {
+            alert('New post added');
+            this.getPostAPI();
+            this.setState({
+                formBlogPost: {
+                    id: 1,
+                    title: "",
+                    body: "",
+                    userId: 1
+                }
             }, (err) => {
                 alert(err);
             });
+        });
     }
 
     updateHandler = (data) => {
