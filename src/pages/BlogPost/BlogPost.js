@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import './BlogPost.css';
 import Post from '../../components/Post/Post';
 import axios from 'axios';
+import API from '../../services/index';
 
 class BlogPost extends Component {
 
@@ -14,6 +15,7 @@ class BlogPost extends Component {
             userId: 1
         },
         isUpdate: false,
+        users: []
     }
 
     deleteHandler = (id) => {
@@ -30,21 +32,27 @@ class BlogPost extends Component {
     }
 
     getPostAPI = () => {
-        axios.get('https://my-json-server.typicode.com/fachri-amin/fake-api/posts')
-            .then((result) => {
-                this.setState({
-                    post: result.data
-                })
-            });
+        API.getLatestBlog().then(result => {
+            this.setState({
+                post: result
+            })
+        });
+
+        API.getUser().then((result) => {
+            this.setState({
+                users: result
+            })
+        })
     }
 
     componentDidMount() {
-        axios.get('https://my-json-server.typicode.com/fachri-amin/fake-api/posts')
-            .then((result) => {
-                this.setState({
-                    post: result.data
-                })
-            });
+        // axios.get('https://my-json-server.typicode.com/fachri-amin/fake-api/posts')
+        //     .then((result) => {
+        //         this.setState({
+        //             post: result.data
+        //         })
+        //     });
+        this.getPostAPI();
     }
 
     formChange = (event) => {
@@ -136,6 +144,12 @@ class BlogPost extends Component {
                     this.state.post.map(post => {
                         return <Post key={post.id} data={post} remove={this.deleteHandler} update={this.updateHandler} goDetail={this.detailHandler} />
                         {/* props key harus ada agar setiap component punya keunikan, jika tidak maka akan ada warning */ }
+                    })
+                }
+
+                {
+                    this.state.users.map(user => {
+                        return <p key={user.id}>{user.name} - {user.email}</p>
                     })
                 }
 
