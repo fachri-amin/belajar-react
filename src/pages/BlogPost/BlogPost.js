@@ -19,16 +19,15 @@ class BlogPost extends Component {
     }
 
     deleteHandler = (id) => {
-        console.log(id);
-        axios.delete(`https://my-json-server.typicode.com/fachri-amin/fake-api/posts/${id}`)
-            .then((res) => {
-                if (res.status == 200) {
-                    alert('Delete Success');
-                }
-                else {
-                    alert('Delete Failed');
-                }
-            });
+        API.deleteBlog(id).then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+                alert('Delete Success');
+            }
+            else {
+                alert('Delete Failed');
+            }
+        }, (err) => console.log(err));
     }
 
     getPostAPI = () => {
@@ -57,12 +56,12 @@ class BlogPost extends Component {
 
     formChange = (event) => {
         let formNewValue = { ...this.state.formBlogPost };
-        let title = event.target.value;
+        let element_value = event.target.value;
         if (!this.state.isUpdate) {
             let timestamp = new Date().getTime();
             formNewValue["id"] = timestamp;
         }
-        formNewValue[event.target.name] = title;
+        formNewValue[event.target.name] = element_value;
         this.setState({
             formBlogPost: formNewValue
         });
@@ -103,19 +102,18 @@ class BlogPost extends Component {
     }
 
     putAPI = () => {
-        axios.put(`https://my-json-server.typicode.com/fachri-amin/fake-api/posts/${this.state.formBlogPost.id}`, this.state.formBlogPost)
-            .then((res) => {
-                alert('Post was updated');
-                this.setState({
-                    formBlogPost: {
-                        id: 1,
-                        title: "",
-                        body: "",
-                        userId: 1
-                    },
-                    isUpdate: false
-                });
-            }, (err) => alert(err));
+        API.updateBlog(this.state.formBlogPost, this.state.formBlogPost.id).then((res) => {
+            alert('Post was updated');
+            this.setState({
+                formBlogPost: {
+                    id: 1,
+                    title: "",
+                    body: "",
+                    userId: 1
+                },
+                isUpdate: false
+            });
+        }, (err) => alert(err))
     }
 
     detailHandler = (id) => {
