@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
-class LifeCycleComponent extends Component{
+class LifeCycleComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -32,11 +32,11 @@ class LifeCycleComponent extends Component{
     //     // dieksekusi ketika component berhasil diupdate
     // }
 
-    // componentWillMount(){
+    // componentWillUnmount(){
     //     // dieksekusi ketika component akan dihilangkan
     // }
 
-    render(){
+    render() {
         // method wajib yang digunakan untuk rendering component
         return (
             <p>Something</p>

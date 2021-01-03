@@ -7,6 +7,7 @@ import BlogPost from './pages/BlogPost/BlogPost';
 import Home from './pages/Home/Home';
 import Product from './pages/Product/Product';
 import DetailPost from './pages/BlogPost/DetailPost/DetailPost';
+import Hooks from './pages/Hooks/Hooks';
 
 function App() {
 
@@ -31,6 +32,9 @@ function App() {
               <li className="nav-item">
                 <Link className="nav-link" to="/blog">Blog</Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/hooks">Hooks</Link>
+              </li>
             </ul>
           </div>
         </nav>
@@ -38,6 +42,7 @@ function App() {
         <Route path="/product" component={Product} />
         <Route path="/blog" exact component={BlogPost} />
         <Route path="/blog/detail/:id" component={DetailPost} />
+        <Route path="/hooks" component={Hooks} />
       </Fragment>
     </Router>
   );
